@@ -236,26 +236,27 @@ export const createProperty = async (
     //   })
     // );
 
-    const photoUrls = await Promise.all(
-      files.map(async (file) => {
-        console.log(file)
-        const fileExtension = path.extname(file.originalname).toLowerCase();
-        const timestamp = Date.now();
-        const public_id = `properties/${timestamp}-${file.originalname.replace(/\.[^/.]+$/, '')}`; // Remove extension to avoid duplication
+const photoUrls = await Promise.all(
+  files.map(async (file) => {
+    try {
+      // Convert file buffer to data URI (required by Cloudinary)
+      const dataUri = `data:${file.mimetype};base64,${file.buffer.toString('base64')}`;
 
-        console.log(public_id)
-    
-        const uploadResult = await cloudinary.uploader.upload(file.path, {
-          resource_type: 'auto',
-          folder: 'properties',
-          public_id,
-        });
+      // Upload to Cloudinary
+      const uploadResult = await cloudinary.uploader.upload(dataUri, {
+        folder: 'properties', // Optional folder organization
+        public_id: `${Date.now()}-${file.originalname.split('.')[0]}`, // Unique identifier
+        overwrite: false, // Prevent overwriting existing files
+        resource_type: 'auto' // Automatically detect image/video/raw
+      });
 
-        console.log(uploadResult)
-    
-        return uploadResult.secure_url;
-      })
-    );
+      return uploadResult.secure_url; // Returns HTTPS URL
+    } catch (error) {
+      console.error('Error uploading to Cloudinary:', error);
+      throw error; // Or handle differently
+    }
+  })
+);
     // const uploadToCloudinary = async (filePath, folder, publicId, fileExtension) => {
     //   const resourceType = (fileExtension === '.pdf') ? 'raw' : 'auto';
     //   const result = await cloudinary.uploader.upload(filePath, {
