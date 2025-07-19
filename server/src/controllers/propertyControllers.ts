@@ -5,18 +5,6 @@ import { S3Client } from "@aws-sdk/client-s3";
 import { Location } from "@prisma/client";
 import { Upload } from "@aws-sdk/lib-storage";
 import axios from "axios";
-// import multer from 'multer';
-// import fs from 'fs';
-import path = require('path');
-import { v2 as cloudinary } from 'cloudinary';
-
-
-// Cloudinary configuration
-cloudinary.config({
-  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
-  api_key: process.env.CLOUDINARY_API_KEY,
-  api_secret: process.env.CLOUDINARY_API_SECRET
-});
 
 const prisma = new PrismaClient();
 
@@ -236,36 +224,6 @@ export const createProperty = async (
     //   })
     // );
 
-    const photoUrls = await Promise.all(
-      files.map(async (file) => {
-        console.log(file)
-        const fileExtension = path.extname(file.originalname).toLowerCase();
-        const timestamp = Date.now();
-        const public_id = `properties/${timestamp}-${file.originalname.replace(/\.[^/.]+$/, '')}`; // Remove extension to avoid duplication
-
-        console.log(public_id)
-    
-        const uploadResult = await cloudinary.uploader.upload(file.path, {
-          resource_type: 'auto',
-          folder: 'properties',
-          public_id,
-        });
-
-        console.log(uploadResult)
-    
-        return uploadResult.secure_url;
-      })
-    );
-    // const uploadToCloudinary = async (filePath, folder, publicId, fileExtension) => {
-    //   const resourceType = (fileExtension === '.pdf') ? 'raw' : 'auto';
-    //   const result = await cloudinary.uploader.upload(filePath, {
-    //     resource_type: 'auto',
-    //     folder: folder,
-    //     public_id: publicId
-    //   });
-    //   return result.secure_url;
-    // };
-
     const geocodingUrl = `https://nominatim.openstreetmap.org/search?${new URLSearchParams(
       {
         street: address,
@@ -300,7 +258,7 @@ export const createProperty = async (
     const newProperty = await prisma.property.create({
       data: {
         ...propertyData,
-        photoUrls,
+        // photoUrls,
         locationId: location.id,
         managerCognitoId,
         amenities:
