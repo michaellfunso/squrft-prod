@@ -9,7 +9,7 @@ import axios from "axios";
 // import fs from 'fs';
 import path = require('path');
 import { v2 as cloudinary } from 'cloudinary';
-
+ 
 
 // Cloudinary configuration
 cloudinary.config({
