@@ -224,6 +224,37 @@ export const createProperty = async (
     //   })
     // );
 
+const photoUrls = await Promise.all(
+  files.map(async (file) => {
+    try {
+      // Convert file buffer to data URI (required by Cloudinary)
+      const dataUri = `data:${file.mimetype};base64,${file.buffer.toString('base64')}`;
+
+      // Upload to Cloudinary
+      const uploadResult = await cloudinary.uploader.upload(dataUri, {
+        folder: 'properties', // Optional folder organization
+        public_id: `${Date.now()}-${file.originalname.split('.')[0]}`, // Unique identifier
+        overwrite: false, // Prevent overwriting existing files
+        resource_type: 'auto' // Automatically detect image/video/raw
+      });
+
+      return uploadResult.secure_url; // Returns HTTPS URL
+    } catch (error) {
+      console.error('Error uploading to Cloudinary:', error);
+      throw error; // Or handle differently
+    }
+  })
+);
+    // const uploadToCloudinary = async (filePath, folder, publicId, fileExtension) => {
+    //   const resourceType = (fileExtension === '.pdf') ? 'raw' : 'auto';
+    //   const result = await cloudinary.uploader.upload(filePath, {
+    //     resource_type: 'auto',
+    //     folder: folder,
+    //     public_id: publicId
+    //   });
+    //   return result.secure_url;
+    // };
+
     const geocodingUrl = `https://nominatim.openstreetmap.org/search?${new URLSearchParams(
       {
         street: address,
