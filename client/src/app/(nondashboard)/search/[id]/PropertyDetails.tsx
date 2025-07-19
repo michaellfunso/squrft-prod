@@ -12,11 +12,43 @@ const PropertyDetails = ({ propertyId }: PropertyDetailsProps) => {
     isLoading,
   } = useGetPropertyQuery(propertyId);
 
-  if (isLoading) return <>Loading...</>;
-  if (isError || !property) {
-    return <>Property not Found</>;
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center min-h-[200px]">
+        <div className="flex items-center gap-2 animate-pulse text-gray-600">
+          <svg
+            className="w-5 h-5 animate-spin text-blue-600"
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+          >
+            <circle
+              className="opacity-25"
+              cx="12"
+              cy="12"
+              r="10"
+              stroke="currentColor"
+              strokeWidth="4"
+            />
+            <path
+              className="opacity-75"
+              fill="currentColor"
+              d="M4 12a8 8 0 018-8v4l3-3-3-3v4a8 8 0 100 16v-4l-3 3 3 3v-4a8 8 0 01-8-8z"
+            />
+          </svg>
+          <span>Loading property...</span>
+        </div>
+      </div>
+    );
   }
-
+  
+  if (isError || !property) {
+    return (
+      <div className="flex items-center justify-center min-h-[200px] text-red-500">
+        Failed to fetch properties. Please try again.
+      </div>
+    );
+  }
   return (
     <div className="mb-6">
       {/* Amenities */}

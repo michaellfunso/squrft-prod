@@ -95,7 +95,7 @@ const NewProperty = () => {
               <h2 className="text-lg font-semibold mb-4">Fees</h2>
               <CustomFormField
                 name="pricePerMonth"
-                label="Price per Month"
+                label="Price"
                 type="number"
               />
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">

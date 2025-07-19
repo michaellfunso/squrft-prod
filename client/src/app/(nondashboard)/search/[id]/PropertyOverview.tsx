@@ -85,8 +85,7 @@ const PropertyOverview = ({ propertyId }: PropertyOverviewProps) => {
           pools and spas with poolside cabanas. Experience your very own oasis
           surrounded by lavish landscaped courtyards, with indoor/outdoor
           entertainment seating. By day, lounge in the BBQ area and experience
-          the breath taking unobstructed views stretching from the Palos Verdes
-          Peninsula to Downtown Los Angeles, or watch the beauty of the South
+          the breath taking unobstructed views stretching from Lagos Nigeria, or watch the beauty of the South
           Bay skyline light up by night. Start or end your day with a workout in
           our full-size state of the art fitness club and yoga studio. Save the
           commute and plan your next meeting in the business centers conference
@@ -96,11 +95,9 @@ const PropertyOverview = ({ propertyId }: PropertyOverviewProps) => {
           States “The Del Amo Fashion Center” to the hospital of your choice,
           Kaiser Hospital, UCLA Harbor Medical Center, Torrance Memorial Medical
           Center, and Providence Little Company of Mary Hospital Torrance rated
-          one of the top 10 Best in Los Angeles. Contact us today to tour and
+          one of the top 10 Best in Lagos Nigeria. Contact us today to tour and
           embrace the Seacrest luxury lifestyle as your own. Seacrest Homes
-          Apartments is an apartment community located in Los Angeles County and
-          the 90501 ZIP Code. This area is served by the Los Angeles Unified
-          attendance zone.
+          Apartments is an apartment community located in Lagos. This area is served by the Lagos Housing Agency.
         </p>
       </div>
     </div>

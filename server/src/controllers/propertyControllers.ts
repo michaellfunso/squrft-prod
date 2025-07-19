@@ -5,6 +5,18 @@ import { S3Client } from "@aws-sdk/client-s3";
 import { Location } from "@prisma/client";
 import { Upload } from "@aws-sdk/lib-storage";
 import axios from "axios";
+// import multer from 'multer';
+// import fs from 'fs';
+import path = require('path');
+import { v2 as cloudinary } from 'cloudinary';
+
+
+// Cloudinary configuration
+cloudinary.config({
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET
+});
 
 const prisma = new PrismaClient();
 
@@ -206,23 +218,53 @@ export const createProperty = async (
       ...propertyData
     } = req.body;
 
+    // const photoUrls = await Promise.all(
+    //   files.map(async (file) => {
+    //     const uploadParams = {
+    //       Bucket: process.env.S3_BUCKET_NAME!,
+    //       Key: `properties/${Date.now()}-${file.originalname}`,
+    //       Body: file.buffer,
+    //       ContentType: file.mimetype,
+    //     };
+
+    //     const uploadResult = await new Upload({
+    //       client: s3Client,
+    //       params: uploadParams,
+    //     }).done();
+
+    //     return uploadResult.Location;
+    //   })
+    // );
+
     const photoUrls = await Promise.all(
       files.map(async (file) => {
-        const uploadParams = {
-          Bucket: process.env.S3_BUCKET_NAME!,
-          Key: `properties/${Date.now()}-${file.originalname}`,
-          Body: file.buffer,
-          ContentType: file.mimetype,
-        };
+        console.log(file)
+        const fileExtension = path.extname(file.originalname).toLowerCase();
+        const timestamp = Date.now();
+        const public_id = `properties/${timestamp}-${file.originalname.replace(/\.[^/.]+$/, '')}`; // Remove extension to avoid duplication
 
-        const uploadResult = await new Upload({
-          client: s3Client,
-          params: uploadParams,
-        }).done();
+        console.log(public_id)
+    
+        const uploadResult = await cloudinary.uploader.upload(file.path, {
+          resource_type: 'auto',
+          folder: 'properties',
+          public_id,
+        });
 
-        return uploadResult.Location;
+        console.log(uploadResult)
+    
+        return uploadResult.secure_url;
       })
     );
+    // const uploadToCloudinary = async (filePath, folder, publicId, fileExtension) => {
+    //   const resourceType = (fileExtension === '.pdf') ? 'raw' : 'auto';
+    //   const result = await cloudinary.uploader.upload(filePath, {
+    //     resource_type: 'auto',
+    //     folder: folder,
+    //     public_id: publicId
+    //   });
+    //   return result.secure_url;
+    // };
 
     const geocodingUrl = `https://nominatim.openstreetmap.org/search?${new URLSearchParams(
       {

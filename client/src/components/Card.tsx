@@ -80,8 +80,8 @@ const Card = ({
             </span>
           </div>
           <p className="text-lg font-bold mb-3">
-            ${property.pricePerMonth.toFixed(0)}{" "}
-            <span className="text-gray-600 text-base font-normal"> /month</span>
+          ₦{property.pricePerMonth.toFixed(0)}{" "}
+            <span className="text-gray-600 text-base font-normal"> /year</span>
           </p>
         </div>
         <hr />

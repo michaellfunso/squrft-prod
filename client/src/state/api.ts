@@ -195,7 +195,7 @@ export const api = createApi({
       query: ({ cognitoId, propertyId }) => ({
         url: `tenants/${cognitoId}/favorites/${propertyId}`,
         method: "DELETE",
-      }),
+      }), 
       invalidatesTags: (result) => [
         { type: "Tenants", id: result?.id },
         { type: "Properties", id: "LIST" },

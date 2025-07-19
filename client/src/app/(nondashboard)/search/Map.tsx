@@ -22,8 +22,8 @@ const Map = () => {
 
     const map = new mapboxgl.Map({
       container: mapContainerRef.current!,
-      style: "mapbox://styles/majesticglue/cm6u301pq008b01sl7yk1cnvb",
-      center: filters.coordinates || [-74.5, 40],
+      style: "mapbox://styles/michaellfunso/cmdaj1al106qj01sh0nga4x5x",
+      center: filters.coordinates || [3.3792, 6.5244],
       zoom: 9,
     });
 
@@ -42,8 +42,44 @@ const Map = () => {
     return () => map.remove();
   }, [isLoading, isError, properties, filters.coordinates]);
 
-  if (isLoading) return <>Loading...</>;
-  if (isError || !properties) return <div>Failed to fetch properties</div>;
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center min-h-[200px]">
+        <div className="flex items-center gap-2 animate-pulse text-gray-600">
+          <svg
+            className="w-5 h-5 animate-spin text-blue-600"
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+          >
+            <circle
+              className="opacity-25"
+              cx="12"
+              cy="12"
+              r="10"
+              stroke="currentColor"
+              strokeWidth="4"
+            />
+            <path
+              className="opacity-75"
+              fill="currentColor"
+              d="M4 12a8 8 0 018-8v4l3-3-3-3v4a8 8 0 100 16v-4l-3 3 3 3v-4a8 8 0 01-8-8z"
+            />
+          </svg>
+          <span>Loading properties...</span>
+        </div>
+      </div>
+    );
+  }
+  
+  if (isError || !properties) {
+    return (
+      <div className="flex items-center justify-center min-h-[200px] text-red-500">
+        Failed to fetch properties. Please try again.
+      </div>
+    );
+  }
+  
 
   return (
     <div className="basis-5/12 grow relative rounded-xl">
