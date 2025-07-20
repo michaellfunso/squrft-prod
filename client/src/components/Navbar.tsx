@@ -303,10 +303,10 @@ useEffect(() => {
               <Link href="/howitworks" className="text-black hover:text-blue-600">
                 How it Works
               </Link>
-              <Link href="/solutions" className="text-black hover:text-blue-600">
+              <Link href="/for-tenants" className="text-black hover:text-blue-600">
                 Solutions
               </Link>
-              <Link href="/properties" className="text-black hover:text-blue-600">
+              <Link href="" className="text-black hover:text-blue-600">
                 Properties
               </Link>
               <Link href="/about" className="text-black hover:text-blue-600">
