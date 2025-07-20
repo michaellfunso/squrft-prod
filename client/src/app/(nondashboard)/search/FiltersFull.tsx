@@ -143,7 +143,7 @@ const FiltersFull = () => {
 
         {/* Price Range */}
         <div>
-          <h4 className="font-bold mb-2">Price Range (Monthly)</h4>
+          <h4 className="font-bold mb-2">Price Range (Yearly)</h4>
           <Slider
             min={0}
             max={10000}
@@ -160,8 +160,8 @@ const FiltersFull = () => {
             }
           />
           <div className="flex justify-between mt-2">
-            <span>${localFilters.priceRange[0] ?? 0}</span>
-            <span>${localFilters.priceRange[1] ?? 10000}</span>
+            <span>₦{localFilters.priceRange[0] ?? 0}</span>
+            <span>₦{localFilters.priceRange[1] ?? 10000000}</span>
           </div>
         </div>
 

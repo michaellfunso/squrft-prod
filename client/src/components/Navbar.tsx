@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Menu, X, Search, Plus, MessageCircle, Bell } from "lucide-react";
 import { FiChevronDown } from "react-icons/fi";
 import { AiOutlineInfoCircle, AiOutlineFileText, AiOutlineHome, AiOutlineUser } from "react-icons/ai";
@@ -28,7 +28,9 @@ const Navbar = () => {
 
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [solutionsOpen, setSolutionsOpen] = useState(false);
+  const dropdownRef = useRef<HTMLDivElement>(null);
   const [aboutOpen, setAboutOpen] = useState(false);
+   const aboutRef = useRef<HTMLDivElement>(null);
 
   const navLinks = [
     { name: "How it Works", href: "/how-it-works" },
@@ -36,6 +38,37 @@ const Navbar = () => {
     { name: "FAQ", href: "/faq" },
     { name: "Feedback", href: "/feedback" },
   ];
+useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (
+        dropdownRef.current &&
+        !dropdownRef.current.contains(event.target as Node)
+      ) {
+        setSolutionsOpen(false);
+      }
+    }
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
+
+
+  // Detect outside click to close About dropdown
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (
+        aboutRef.current &&
+        !aboutRef.current.contains(event.target as Node)
+      ) {
+        setAboutOpen(false);
+      }
+    }
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
 
   return (
     <div className="w-full bg-blue-600 py-3 rounded-b-2xl">
@@ -78,71 +111,91 @@ const Navbar = () => {
 
           {/* Desktop nav */}
           {!isDashboardPage && (<nav className="hidden lg:flex items-center gap-8">
-            <Link href="/how-it-works" className="text-sm font-medium text-black hover:text-blue-600">
+            <Link href="/howitworks" className="text-sm font-medium text-black hover:text-blue-600">
               How it Works
             </Link>
 
             {/* Solutions Dropdown */}
-            <div className="relative">
-              <button
-                onClick={() => setSolutionsOpen(!solutionsOpen)}
-                className="text-sm font-medium text-black hover:text-blue-600 flex items-center gap-1"
-              >
-                Solutions <FiChevronDown />
-              </button>
-              {solutionsOpen && (
-                <div className="absolute mt-3 right-0 w-96 bg-gray-50 border border-gray-200 rounded-2xl shadow-lg p-6 flex flex-col gap-4 z-50">
-                  <div className="flex gap-6">
-                    <div className="flex flex-col gap-2">
-                      <div className="flex items-center gap-2 text-black font-semibold">
-                      <Link href="/solutions/for-tenants" className="text-sm font-medium text-black hover:text-blue-600"> <AiOutlineUser /> Squrft for Tenants </Link>
-                       
-                      </div>
-                      <p className="text-sm text-gray-500">Find verified homes to rent or buy fast and hassle-free.</p>
-                    </div>
-                    <div className="flex flex-col gap-2">
-                      <div className="flex items-center gap-2 text-black font-semibold">
-                      <Link href="/solutions/for-owners" className="text-sm font-medium text-black hover:text-blue-600"> <AiOutlineHome /> Squrft for Owners </Link>
-                       
-                      </div>
-                      <p className="text-sm text-gray-500">List your properties and connect directly with real tenants.</p>
-                    </div>
-                  </div>
-                  <div className="flex items-center gap-2 text-black font-medium cursor-pointer hover:text-blue-600">
-                    💬 Contact Us ↗
-                  </div>
-                </div>
-              )}
-            </div>
+            <div className="relative" ref={dropdownRef}>
+      <button
+        onClick={() => setSolutionsOpen(!solutionsOpen)}
+        className="text-sm font-medium text-black hover:text-blue-600 flex items-center gap-1"
+      >
+        Solutions <FiChevronDown />
+      </button>
 
-            <Link href="/properties" className="text-sm font-medium text-black hover:text-blue-600">
+      {solutionsOpen && (
+        <div className="absolute mt-3 right-0 w-96 bg-gray-50 border border-gray-200 rounded-2xl shadow-lg p-6 flex flex-col gap-4 z-50">
+          <div className="flex gap-6">
+            <div className="flex flex-col gap-2">
+              <div className="flex items-center gap-2 text-black font-semibold">
+                <Link
+                  href="/solutions/for-tenants"
+                  className="text-sm font-medium text-black hover:text-blue-600"
+                >
+                  <AiOutlineUser /> Squrft for Tenants
+                </Link>
+              </div>
+              <p className="text-sm text-gray-500">
+                Find verified homes to rent or buy fast and hassle-free.
+              </p>
+            </div>
+            <div className="flex flex-col gap-2">
+              <div className="flex items-center gap-2 text-black font-semibold">
+                <Link
+                  href="/solutions/for-owners"
+                  className="text-sm font-medium text-black hover:text-blue-600"
+                >
+                  <AiOutlineHome /> Squrft for Owners
+                </Link>
+              </div>
+              <p className="text-sm text-gray-500">
+                List your properties and connect directly with real tenants.
+              </p>
+            </div>
+          </div>
+          <div className="flex items-center gap-2 text-black font-medium cursor-pointer hover:text-blue-600">
+            💬 Contact Us ↗
+          </div>
+        </div>
+      )}
+    </div>
+
+            <Link href="/" className="text-sm font-medium text-black hover:text-blue-600">
               Properties
             </Link>
 
             {/* About Dropdown */}
-            <div className="relative">
-              <button
-                onClick={() => setAboutOpen(!aboutOpen)}
-                className="text-sm font-medium text-black hover:text-blue-600 flex items-center gap-1"
-              >
-                About <FiChevronDown />
-              </button>
-              {aboutOpen && (
-                <div className="absolute mt-3 right-0 w-60 bg-gray-50 border border-gray-200 rounded-2xl shadow-lg p-4 flex flex-col gap-3 z-50">
-                  <Link href="/about/why-squrft" className="flex items-center gap-2 text-sm text-black font-medium hover:text-blue-600">
-                    <AiOutlineInfoCircle /> Why Squrft
-                  </Link>
-                  <Link href="/about/legal" className="flex items-center gap-2 text-sm text-black font-medium hover:text-blue-600">
-                    <AiOutlineFileText /> Legal
-                  </Link>
-                </div>
-              )}
-            </div>
+            <div className="relative" ref={aboutRef}>
+      <button
+        onClick={() => setAboutOpen(!aboutOpen)}
+        className="text-sm font-medium text-black hover:text-blue-600 flex items-center gap-1"
+      >
+        About <FiChevronDown />
+      </button>
+
+      {aboutOpen && (
+        <div className="absolute mt-3 right-0 w-60 bg-gray-50 border border-gray-200 rounded-2xl shadow-lg p-4 flex flex-col gap-3 z-50">
+          <Link
+            href="/about"
+            className="flex items-center gap-2 text-sm text-black font-medium hover:text-blue-600"
+          >
+            <AiOutlineInfoCircle /> Why Squrft
+          </Link>
+          <Link
+            href=""
+            className="flex items-center gap-2 text-sm text-black font-medium hover:text-blue-600"
+          >
+            <AiOutlineFileText /> Legal
+          </Link>
+        </div>
+      )}
+    </div>
 
             <Link href="/faq" className="text-sm font-medium text-black hover:text-blue-600">
               FAQ
             </Link>
-            <Link href="/feedback" className="text-sm font-medium text-black hover:text-blue-600">
+            <Link href="" className="text-sm font-medium text-black hover:text-blue-600">
               Feedback
             </Link>
           </nav>)}
@@ -150,48 +203,70 @@ const Navbar = () => {
           {/* Right actions */}
           <div className="flex items-center gap-4">
             {authUser ? (
-              <>
-                <div className="relative hidden md:block">
-                  <MessageCircle className="w-6 h-6 cursor-pointer text-primary-200 hover:text-primary-400"/>
-                  <span className="absolute top-0 right-0 w-2 h-2 bg-secondary-700 rounded-full"></span>
-                </div>
-                <div className="relative hidden md:block">
-                  <Bell className="w-6 h-6 cursor-pointer text-primary-200 hover:text-primary-400"/>
-                  <span className="absolute top-0 right-0 w-2 h-2 bg-secondary-700 rounded-full"></span>
-                </div>
-
-                <DropdownMenu>
-                  <DropdownMenuTrigger className="flex items-center gap-2 focus:outline-none">
-                    <Avatar>
-                      <AvatarImage src={authUser.userInfo?.image} />
-                      <AvatarFallback className="bg-primary-600">
-                        {authUser.userRole?.[0].toUpperCase()}
-                      </AvatarFallback>
-                     
-                    </Avatar>
-                    <p className="text-primary-200 hidden md:block">{authUser.userInfo?.name}</p>
-                  </DropdownMenuTrigger>
-                  <DropdownMenuContent className="bg-white text-primary-700">
-                    <DropdownMenuItem className="cursor-pointer hover:!bg-primary-700 hover:!text-primary-100 font-bold" onClick={()=> router.push(
-                      authUser.userRole?.toLowerCase() === "manager" ? "/managers/properties" : "/tenants/favorites",
-                      { scroll: false }
-                    )}>
-                      Go to Dashboard
-                    </DropdownMenuItem>
-                    <DropdownMenuSeparator className="bg-primary-200" />
-                    <DropdownMenuItem className="cursor-pointer hover:!bg-primary-700 hover:!text-primary-100" onClick={()=> router.push(
-                      `/${authUser.userRole?.toLowerCase()}s/settings`, 
-                      { scroll: false }
-                    )}>
-                      Settings
-                    </DropdownMenuItem>
-                    <DropdownMenuItem className="cursor-pointer hover:!bg-primary-700 hover:!text-primary-100" onClick={handleSignOut}>
-                      Sign Out
-                    </DropdownMenuItem>
-
-                  </DropdownMenuContent>
-                </DropdownMenu>
-              </>
+             <>
+             <div className="flex items-center gap-4">
+               {/* Message Icon */}
+               <div className="relative hidden md:block">
+                 <MessageCircle className="w-6 h-6 text-gray-500 hover:text-primary-600 cursor-pointer transition-colors duration-200" />
+                 <span className="absolute top-0 right-0 w-2 h-2 bg-red-500 rounded-full border border-white"></span>
+               </div>
+           
+               {/* Bell Icon */}
+               <div className="relative hidden md:block">
+                 <Bell className="w-6 h-6 text-gray-500 hover:text-primary-600 cursor-pointer transition-colors duration-200" />
+                 <span className="absolute top-0 right-0 w-2 h-2 bg-red-500 rounded-full border border-white"></span>
+               </div>
+           
+               {/* User Dropdown */}
+               <DropdownMenu>
+                 <DropdownMenuTrigger className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-gray-100 hover:bg-gray-200 transition-all duration-200 focus:outline-none">
+                   <Avatar className="h-7 w-7">
+                     <AvatarImage src={authUser.userInfo?.image} />
+                     <AvatarFallback className="bg-primary-600 text-white text-sm font-semibold">
+                       {authUser.userRole?.[0].toUpperCase()}
+                     </AvatarFallback>
+                   </Avatar>
+                   <span className="text-sm font-medium text-gray-800 hidden md:block truncate max-w-[150px]">
+                     {authUser.userInfo?.name}
+                   </span>
+                 </DropdownMenuTrigger>
+           
+                 <DropdownMenuContent className="bg-white border border-gray-200 shadow-lg mt-2 rounded-md text-sm text-gray-700 min-w-[180px]">
+                   <DropdownMenuItem
+                     className="hover:bg-primary-600 hover:text-white px-3 py-2 cursor-pointer font-semibold"
+                     onClick={() =>
+                       router.push(
+                         authUser.userRole?.toLowerCase() === "manager"
+                           ? "/managers/properties"
+                           : "/tenants/favorites",
+                         { scroll: false }
+                       )
+                     }
+                   >
+                     Go to Dashboard
+                   </DropdownMenuItem>
+                   <DropdownMenuSeparator className="bg-gray-200 my-1" />
+                   <DropdownMenuItem
+                     className="hover:bg-primary-600 hover:text-white px-3 py-2 cursor-pointer"
+                     onClick={() =>
+                       router.push(`/${authUser.userRole?.toLowerCase()}s/settings`, {
+                         scroll: false,
+                       })
+                     }
+                   >
+                     Settings
+                   </DropdownMenuItem>
+                   <DropdownMenuItem
+                     className="hover:bg-primary-600 hover:text-white px-3 py-2 cursor-pointer"
+                     onClick={handleSignOut}
+                   >
+                     Sign Out
+                   </DropdownMenuItem>
+                 </DropdownMenuContent>
+               </DropdownMenu>
+             </div>
+           </>
+           
             ) : (
             <>
             <button className="text-black p-2 hover:bg-gray-100 rounded-full hidden md:block">
@@ -225,7 +300,7 @@ const Navbar = () => {
         {mobileMenuOpen && (
           <div className="lg:hidden bg-white border-t border-gray-200">
             <div className="flex flex-col gap-4 p-4">
-              <Link href="/how-it-works" className="text-black hover:text-blue-600">
+              <Link href="/howitworks" className="text-black hover:text-blue-600">
                 How it Works
               </Link>
               <Link href="/solutions" className="text-black hover:text-blue-600">
@@ -240,7 +315,7 @@ const Navbar = () => {
               <Link href="/faq" className="text-black hover:text-blue-600">
                 FAQ
               </Link>
-              <Link href="/feedback" className="text-black hover:text-blue-600">
+              <Link href="" className="text-black hover:text-blue-600">
                 Feedback
               </Link>
             </div>

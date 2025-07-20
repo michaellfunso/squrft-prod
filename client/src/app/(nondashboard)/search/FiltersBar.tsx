@@ -97,10 +97,12 @@ const FiltersBar = () => {
   };
 
   return (
-    <div className="flex justify-between items-center w-full py-5">
-      {/* Filters */}
-      <div className="flex justify-between items-center gap-4 p-2">
-        {/* All Filters */}
+    <div className="w-full py-5">
+    <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4 w-full">
+      
+      {/* Left Filters Section */}
+      <div className="flex flex-wrap gap-3 w-full lg:w-auto">
+        {/* All Filters Button */}
         <Button
           variant="outline"
           className={cn(
@@ -112,79 +114,71 @@ const FiltersBar = () => {
           <Filter className="w-4 h-4" />
           <span>All Filters</span>
         </Button>
-
-        {/* Search Location */}
-        <div className="flex items-center">
+  
+        {/* Location Search */}
+        <div className="flex">
           <Input
             placeholder="Search location"
             value={searchInput}
             onChange={(e) => setSearchInput(e.target.value)}
-            className="w-40 rounded-l-xl rounded-r-none border-primary-400 border-r-0"
+            className="w-36 sm:w-40 rounded-l-xl rounded-r-none border-primary-400 border-r-0"
           />
           <Button
             onClick={handleLocationSearch}
-            className={`rounded-r-xl rounded-l-none border-l-none border-primary-400 shadow-none 
-              border hover:bg-primary-700 hover:text-primary-50`}
+            className="rounded-r-xl rounded-l-none border-primary-400 border shadow-none hover:bg-primary-700 hover:text-primary-50"
           >
             <Search className="w-4 h-4" />
           </Button>
         </div>
-
+  
         {/* Price Range */}
         <div className="flex gap-1">
-          {/* Minimum Price Selector */}
           <Select
             value={filters.priceRange[0]?.toString() || "any"}
-            onValueChange={(value) =>
-              handleFilterChange("priceRange", value, true)
-            }
+            onValueChange={(value) => handleFilterChange("priceRange", value, true)}
           >
-            <SelectTrigger className="w-22 rounded-xl border-primary-400">
+            <SelectTrigger className="w-24 rounded-xl border-primary-400">
               <SelectValue>
                 {formatPriceValue(filters.priceRange[0], true)}
               </SelectValue>
             </SelectTrigger>
             <SelectContent className="bg-white">
-              <SelectItem value="any">Any Min Price</SelectItem>
-              {[500, 1000, 1500, 2000, 3000, 5000, 10000].map((price) => (
-                <SelectItem key={price} value={price.toString()}>
-                  ₦{price / 1000}k+
-                </SelectItem>
+            <SelectItem value="any">Any Min Price</SelectItem>
+{[50000, 75000, 100000, 150000, 200000, 300000, 500000].map((price) => (
+  <SelectItem key={price} value={price.toString()}>
+    ₦{price.toLocaleString()}+
+  </SelectItem>
               ))}
             </SelectContent>
           </Select>
-
-          {/* Maximum Price Selector */}
+  
           <Select
             value={filters.priceRange[1]?.toString() || "any"}
-            onValueChange={(value) =>
-              handleFilterChange("priceRange", value, false)
-            }
+            onValueChange={(value) => handleFilterChange("priceRange", value, false)}
           >
-            <SelectTrigger className="w-22 rounded-xl border-primary-400">
+            <SelectTrigger className="w-24 rounded-xl border-primary-400">
               <SelectValue>
                 {formatPriceValue(filters.priceRange[1], false)}
               </SelectValue>
             </SelectTrigger>
             <SelectContent className="bg-white">
-              <SelectItem value="any">Any Max Price</SelectItem>
-              {[1000, 2000, 3000, 5000, 10000].map((price) => (
-                <SelectItem key={price} value={price.toString()}>
-                  &lt;₦{price / 1000}k
-                </SelectItem>
+            <SelectItem value="any">Any Max Price</SelectItem>
+{[300000, 500000, 750000, 1000000, 2000000, 5000000, 10000000].map((price) => (
+  <SelectItem key={price} value={price.toString()}>
+    ₦{price.toLocaleString()}+
+  </SelectItem>
               ))}
             </SelectContent>
           </Select>
         </div>
-
-        {/* Beds and Baths */}
+  
+        {/* Beds & Baths */}
         <div className="flex gap-1">
-          {/* Beds */}
           <Select
             value={filters.beds}
             onValueChange={(value) => handleFilterChange("beds", value, null)}
           >
-            <SelectTrigger className="w-26 rounded-xl border-primary-400">
+            <SelectTrigger className="w-24 rounded-xl border-primary-400">
               <SelectValue placeholder="Beds" />
             </SelectTrigger>
             <SelectContent className="bg-white">
@@ -195,13 +189,12 @@ const FiltersBar = () => {
               <SelectItem value="4">4+ beds</SelectItem>
             </SelectContent>
           </Select>
-
-          {/* Baths */}
+  
           <Select
             value={filters.baths}
             onValueChange={(value) => handleFilterChange("baths", value, null)}
           >
-            <SelectTrigger className="w-26 rounded-xl border-primary-400">
+            <SelectTrigger className="w-24 rounded-xl border-primary-400">
               <SelectValue placeholder="Baths" />
             </SelectTrigger>
             <SelectContent className="bg-white">
@@ -212,13 +205,11 @@ const FiltersBar = () => {
             </SelectContent>
           </Select>
         </div>
-
+  
         {/* Property Type */}
         <Select
           value={filters.propertyType || "any"}
-          onValueChange={(value) =>
-            handleFilterChange("propertyType", value, null)
-          }
+          onValueChange={(value) => handleFilterChange("propertyType", value, null)}
         >
           <SelectTrigger className="w-32 rounded-xl border-primary-400">
             <SelectValue placeholder="Home Type" />
@@ -236,9 +227,9 @@ const FiltersBar = () => {
           </SelectContent>
         </Select>
       </div>
-
-      {/* View Mode */}
-      <div className="flex justify-between items-center gap-4 p-2">
+  
+      {/* View Mode (Always last) */}
+      <div className="flex justify-start lg:justify-end w-full lg:w-auto">
         <div className="flex border rounded-xl">
           <Button
             variant="ghost"
@@ -263,6 +254,8 @@ const FiltersBar = () => {
         </div>
       </div>
     </div>
+  </div>
+  
   );
 };
 

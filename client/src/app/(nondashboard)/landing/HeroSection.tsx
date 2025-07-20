@@ -9,6 +9,7 @@ import { useDispatch } from "react-redux";
 import { useRouter } from "next/navigation";
 import { setFilters } from "@/state";
 import { Search } from "lucide-react";
+import DualSearchBar from "./SearchBar";
 
 const heroData = [
   {
@@ -140,7 +141,7 @@ const HeroSection = () => {
             </span>
           </motion.p>
 
-          <motion.div
+          {/* <motion.div
             className="flex flex-col sm:flex-row justify-center max-w-xl mx-auto gap-4"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -163,7 +164,9 @@ const HeroSection = () => {
             >
               Explore Properties
             </Button>
-          </motion.div>
+          </motion.div> */}
+
+          <DualSearchBar></DualSearchBar>
 
           <motion.div
             className="mt-12 flex flex-wrap justify-center gap-6 text-white/80 text-sm sm:text-base"
