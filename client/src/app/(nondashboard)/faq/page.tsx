@@ -41,75 +41,82 @@ export default function FAQPage() {
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
 
   return (
-    <>
-    <div className="min-h-screen bg-gradient-to-br from-white to-blue-50 py-24 px-6 sm:px-12 text-gray-800">
-      <div className="max-w-5xl mx-auto">
-        <motion.h1
-          initial={{ opacity: 0, y: 40 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
-          className="text-4xl sm:text-5xl font-extrabold text-center mb-16 text-blue-600"
-        >
-          Frequently Asked Questions
-        </motion.h1>
+   <>
+      <section className="relative bg-gradient-to-br from-white to-blue-50 py-24 px-6 sm:px-12 text-gray-800">
+  <div className="max-w-5xl mx-auto">
+    <motion.h1
+      initial={{ opacity: 0, y: 40 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.6 }}
+      className="text-4xl sm:text-5xl font-extrabold text-center mb-16 text-blue-600"
+    >
+      Frequently Asked Questions
+    </motion.h1>
 
-        <div className="space-y-6">
-          {faqs.map((faq, i) => {
-            const isOpen = activeIndex === i;
-            return (
-              <motion.div
-                key={i}
-                className="bg-white border border-blue-100 rounded-2xl shadow-lg overflow-hidden"
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.4, delay: i * 0.1 }}
-                viewport={{ once: true }}
-              >
-                <button
-                  onClick={() => setActiveIndex(isOpen ? null : i)}
-                  className="w-full text-left p-6 flex justify-between items-center text-lg font-medium text-blue-600 hover:text-blue-800 focus:outline-none"
-                >
-                  {faq.question}
-                  <span className="text-2xl">{isOpen ? "−" : "+"}</span>
-                </button>
-
-                <AnimatePresence initial={false}>
-                  {isOpen && (
-                    <motion.div
-                      key="answer"
-                      initial={{ height: 0, opacity: 0 }}
-                      animate={{ height: "auto", opacity: 1 }}
-                      exit={{ height: 0, opacity: 0 }}
-                      transition={{ duration: 0.3 }}
-                      className="px-6 pb-6 text-gray-600 overflow-hidden"
-                    >
-                      <div>{faq.answer}</div>
-                    </motion.div>
-                  )}
-                </AnimatePresence>
-              </motion.div>
-            );
-          })}
-        </div>
-
-        <motion.div
-          initial={{ opacity: 0, y: 40 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.4 }}
-          viewport={{ once: true }}
-          className="mt-20 text-center"
-        >
-          <p className="text-gray-500 mb-4">Still have questions or need support?</p>
-          <a
-            href="/contact"
-            className="inline-block px-8 py-4 rounded-full bg-blue-600 text-white font-semibold hover:bg-blue-700 transition-all duration-300 shadow-lg"
+    <div className="space-y-6">
+      {faqs.map((faq, i) => {
+        const isOpen = activeIndex === i;
+        return (
+          <motion.div
+            key={i}
+            className={`bg-white border border-blue-100 rounded-2xl shadow-md overflow-hidden transition-all duration-500`}
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.4, delay: i * 0.1 }}
+            viewport={{ once: true }}
           >
-            Contact Us
-          </a>
-        </motion.div>
-      </div>
+            <button
+              onClick={() => setActiveIndex(isOpen ? null : i)}
+              className="w-full text-left p-6 flex justify-between items-center text-lg font-medium text-blue-600 hover:text-blue-800 focus:outline-none"
+            >
+              {faq.question}
+              <span className="text-2xl">{isOpen ? "−" : "+"}</span>
+            </button>
+
+            <AnimatePresence initial={false}>
+              {isOpen && (
+                <motion.div
+                  key="answer"
+                  initial={{ height: 0, opacity: 0 }}
+                  animate={{ height: "auto", opacity: 1 }}
+                  exit={{ height: 0, opacity: 0 }}
+                  transition={{
+                    height: { duration: 0.35 },
+                    opacity: { duration: 0.3 },
+                  }}
+                  className="px-6 pb-6 text-gray-600 overflow-hidden"
+                >
+                  <div>{faq.answer}</div>
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </motion.div>
+        );
+      })}
     </div>
-    <FooterSection />
+
+    <motion.div
+      initial={{ opacity: 0, y: 40 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.6, delay: 0.4 }}
+      viewport={{ once: true }}
+      className="mt-20 text-center"
+    >
+      <p className="text-gray-500 mb-4">
+        Still have questions or need support?
+      </p>
+      <a
+        href="/contact"
+        className="inline-block px-8 py-4 rounded-full bg-blue-600 text-white font-semibold hover:bg-blue-700 transition-all duration-300 shadow-lg"
+      >
+        Contact Us
+      </a>
+    </motion.div>
+  </div>
+</section>
+
+<FooterSection/>
+      
     </>
   );
 }

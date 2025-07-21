@@ -28,6 +28,8 @@ const Navbar = () => {
 
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [solutionsOpen, setSolutionsOpen] = useState(false);
+  const [showDropdown, setShowDropdown] = useState(false);
+  const [isMobile400, setIsMobile400] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
   const [aboutOpen, setAboutOpen] = useState(false);
    const aboutRef = useRef<HTMLDivElement>(null);
@@ -69,6 +71,15 @@ useEffect(() => {
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
+
+  useEffect(() => {
+    const checkScreen = () => setIsMobile400(window.innerWidth <= 400);
+    checkScreen();
+    window.addEventListener("resize", checkScreen);
+    return () => window.removeEventListener("resize", checkScreen);
+  }, []);
+
+  const toggleDropdown = () => setShowDropdown(!showDropdown);
 
   return (
     <div className="w-full bg-blue-600 py-3 rounded-b-2xl">
@@ -269,23 +280,50 @@ useEffect(() => {
            
             ) : (
             <>
-            <button className="text-black p-2 hover:bg-gray-100 rounded-full hidden md:block">
-              <Search size={18} />
-            </button>
+      <button className="text-black p-2 hover:bg-gray-100 rounded-full hidden md:block">
+        <Search size={18} />
+      </button>
 
-            <Link href="/signin" className="text-black text-sm font-medium">
+      {!isMobile400 && (
+        <>
+          <Link href="/signin" className="text-black text-sm font-medium">
+            Sign In
+          </Link>
+          <Link href="/signup" className="text-blue-600 text-sm font-medium">
+            Sign Up
+          </Link>
+        </>
+      )}
+
+      <div className="relative">
+        <Button
+          onClick={toggleDropdown}
+          className="bg-black text-white rounded-full px-4 py-2 text-sm"
+        >
+          List a Property
+        </Button>
+
+        {/* Mobile dropdown */}
+        {isMobile400 && showDropdown && (
+          <div className="absolute right-0 mt-2 w-40 bg-white border rounded-md shadow-lg z-50">
+            <Link
+              href="/signin"
+              className="block px-4 py-2 text-sm text-gray-800 hover:bg-gray-100"
+              onClick={() => setShowDropdown(false)}
+            >
               Sign In
             </Link>
-
-            <Link href="/signup" className="text-blue-600 text-sm font-medium">
+            <Link
+              href="/signup"
+              className="block px-4 py-2 text-sm text-blue-600 hover:bg-gray-100"
+              onClick={() => setShowDropdown(false)}
+            >
               Sign Up
             </Link>
-
-            <Button className="bg-black text-white rounded-full px-4 py-2 text-sm">
-            List a Property
-            </Button>
-
-            </>)}
+          </div>
+        )}
+      </div>
+    </>)}
             {/* Mobile menu toggle */}
             <button
               className="lg:hidden text-black"
