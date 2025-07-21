@@ -106,7 +106,7 @@ export default function FAQPage() {
         Still have questions or need support?
       </p>
       <a
-        href="/contact"
+        href=""
         className="inline-block px-8 py-4 rounded-full bg-blue-600 text-white font-semibold hover:bg-blue-700 transition-all duration-300 shadow-lg"
       >
         Contact Us
